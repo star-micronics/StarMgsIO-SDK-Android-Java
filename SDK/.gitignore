@@ -1,0 +1,32 @@
+# Folder
+/build
+/app/build
+
+# File
+*.iml
+*.ipr
+*.iws
+
+*.apk
+*.ap_
+*.dex
+*.class
+
+local.properties
+.gradle
+
+.idea/*.xml
+
+.idea/libraries/
+
+.idea/copyright/profiles_settings.xml
+
+!.idea/gradle.xml
+
+!.idea/inspectionProfiles/*.xml
+.idea/inspectionProfiles/profiles_settings.xml
+
+!.idea/scopes/*.xml
+.idea/scopes/scope_settings.xml
+
+!.idea/templateLanguages.xml
