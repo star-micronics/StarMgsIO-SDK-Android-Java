@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScaleActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/WeightTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="--- []"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/StateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Status:\nData Type:\nComparator Result:"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/ZeroPointAdjustmentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="15dp"
+            android:text="Zero Point Adjustment" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/OutputConditionSettingSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:entries="@array/output_condition_settings_list" />
+
+            <Button
+                android:id="@+id/OutputConditionSettingButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:text="Set Output Condition" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
