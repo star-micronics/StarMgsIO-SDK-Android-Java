@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.starmicronics.starmgsio.ConnectionInfo;
 import com.starmicronics.starmgsio.Scale;
@@ -37,6 +40,7 @@ public class ScaleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_scale);
         setTitle("MG series Scale Sample");
 
@@ -129,9 +133,19 @@ public class ScaleActivity extends AppCompatActivity {
 
     }
 
+    public void setPadding(View view) {
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            int insetTypes = WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars();
+            Insets bars = insets.getInsets(insetTypes);
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        setPadding(findViewById(R.id.BottomLinerLayout));
 
         if(mScale == null) {
 

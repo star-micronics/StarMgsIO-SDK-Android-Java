@@ -1,5 +1,7 @@
 package com.starmicronics.starmgsiosdk;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -40,29 +46,37 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_scan);
         setTitle("MG series Scale Sample");
 
-        if (Build.VERSION_CODES.S <= Build.VERSION.SDK_INT) {
+        if (SDK_INT <= 30) {
             if( (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
-                    (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) ||
-                    (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) ){
-                // If you are using Android 12 and targetSdkVersion is 31 or later,
-                // you have to request Bluetooth permission (Nearby devices permission) to use the Bluetooth printer.
-                // https://developer.android.com/about/versions/12/features/bluetooth-permissions
+                    (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) ||
+                    (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) ){
+                // If you are using Android 11 and targetSdkVersion is 30 or earlier,
+                // you have to request Bluetooth permission to use the Bluetooth printer.
+                // https://developer.android.com/develop/connectivity/bluetooth/bt-permissions#declare-android11-or-lower
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.BLUETOOTH_CONNECT,
-                        Manifest.permission.BLUETOOTH_SCAN},    0x00);
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN},    0x00);
             }
         }
         else
         {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0x00);
+            if((ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) ||
+                    (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) ){
+                // If you are using Android 12 and targetSdkVersion is 31 or later,
+                // you have to request Bluetooth permission to use the Bluetooth printer.
+                // https://developer.android.com/develop/connectivity/bluetooth/bt-permissions#declare-android12-or-higher
+
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT},    0x00);
             }
         }
-
 
         ListView discoveredListView = findViewById(R.id.DiscoveredListView);
 
@@ -102,9 +116,19 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
+    public void setPadding(View view) {
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            int insetTypes = WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars();
+            Insets bars = insets.getInsets(insetTypes);
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        setPadding(findViewById(R.id.DiscoveredListView));
 
         mStarDeviceManager = new StarDeviceManager(ScanActivity.this, StarDeviceManager.InterfaceType.All);
 

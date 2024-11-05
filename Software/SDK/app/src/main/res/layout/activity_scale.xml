@@ -35,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/BottomLinerLayout">
 
         <Button
             android:id="@+id/ZeroPointAdjustmentButton"
